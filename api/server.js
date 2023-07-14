@@ -10,12 +10,14 @@ app.get("/",function(req,res){
 
         let responseData="";
 
+        //response comes in chunks
         response.on("data", function(data) {
             // Accumulate the received data
         
             responseData += data;
         });
     
+        //when complete response is received then parse
         response.on("end", function() {
             // Parse the accumulated data once all data has been received
             const information = JSON.parse(responseData);
