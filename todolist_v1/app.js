@@ -4,21 +4,21 @@ const ejs=require("ejs")
 
 const app =express();
 
-var items=[]
+let items=["Buy Food","Cook Food","Eat Food"]
 
 app.use(bodyParser.urlencoded({extended:true}));
 
 app.set("view engine","ejs");
 
-var today=new Date();
+let today=new Date();
 
-var options={
+let options={
     weekday:"long",
     day:"numeric",
     month:"long"
 };
 
-var date=today.toLocaleDateString("en-US",options)
+let date=today.toLocaleDateString("en-US",options)
 
 app.get("/",function(req,res){
 
