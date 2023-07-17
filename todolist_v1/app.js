@@ -4,21 +4,32 @@ const ejs=require("ejs")
 
 const app =express();
 
+var items=[]
+
+app.use(bodyParser.urlencoded({extended:true}));
+
 app.set("view engine","ejs");
 
 var today=new Date();
-var day=""
+
+var options={
+    weekday:"long",
+    day:"numeric",
+    month:"long"
+};
+
+var date=today.toLocaleDateString("en-US",options)
 
 app.get("/",function(req,res){
-   if((today.getDay()===6)||(today.getDay()===0)){
-    day="weekend";
-   }else{
-    day="weekday"
-   }
 
-   res.render("list",{kindOfDay:day});
+   res.render("list",{kindOfDay:date,listItems:items});
 
-})
+});
+
+app.post("/",function(req,res){
+   items.push(req.body.newItem);
+   res.redirect("/");
+});
 
 app.listen(3000,()=>{
     console.log("connected to server");
