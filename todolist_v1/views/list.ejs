@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>todo_list</title>
+    <link rel="stylesheet",stylesheet="public/css/style.css">
 </head>
 <body>
 
-  <h1><%= kindOfDay %></h1>
+  <h1><%= listHeading %></h1>
     <ul>
       <% for(let i=0;i<listItems.length;i++){ %>
             <li><%= listItems[i] %></li>
@@ -15,9 +16,8 @@
     </ul>
     <form action="/" method="post">
         <input type="text" name="newItem">
-        <button type="submit" name="button">go</button>
+        <button type="submit" name="button" value=<%= listHeading %>>go</button>
     </form>
   
-    
 </body>
 </html>
