@@ -22,7 +22,17 @@ const fruitSchema = mongoose.Schema({
     review:String
 });
 
+const personSchema=mongoose.Schema({
+    name:String,
+    age:Number,
+    favFruit:fruitSchema
+});
+
+const Person=mongoose.model("person",personSchema);
+
 const Fruit=mongoose.model("Fruit",fruitSchema);
+
+
 
 // const apple=Fruit({
 //     name:"Apple",
@@ -97,25 +107,18 @@ const Fruit=mongoose.model("Fruit",fruitSchema);
 
             //making a relationship bet two collection
 
-const personSchema=mongoose.Schema({
-    name:String,
-    age:Number,
-    favFruit:fruitSchema
-});
 
-const Person=mongoose.model("person",personSchema);
+// const pineapple=Fruit({
+//     name:"pineapple",
+//     rating:6,
+//     review:"decent"
+// });
 
-const pineapple=Fruit({
-    name:"pineapple",
-    rating:6,
-    review:"decent"
-});
-
-Fruit.insertMany([pineapple]).then(()=>{
-    console.log("inserted");
-}).catch((err)=>{
-    console.error(err);
-});
+// Fruit.insertMany([pineapple]).then(()=>{
+//     console.log("inserted");
+// }).catch((err)=>{
+//     console.error(err);
+// });
 // pineapple.save();
 
 // const john=Person({
