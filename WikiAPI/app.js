@@ -22,6 +22,8 @@ const articleSchema={
 
 const Articles=mongoose.model("articles",articleSchema);
 
+
+        //for get request
 app.get("/articles",(req,res)=>{
   Articles.find().then((articles)=>{
 
@@ -37,9 +39,36 @@ app.get("/articles",(req,res)=>{
     res.send(articles);
     mongoose.connection.close();
 
+
   }).catch((err)=>{
     console.log(err);
   });
+});
+
+      //for post request
+app.post("/articles",(req,res)=>{
+
+  // console.log(req.body.title);
+  // console.log(req.body.content);
+  // res.send("received");
+
+      //to save data in our mongo DB database
+  const newArticle= new Articles({
+    title: req.body.title,
+    content: req.body.content
+    
+  });
+  newArticle.save(
+    // function(err){
+    //   if(!err){
+    //     res.send("SAVED");
+    //   }else{
+    //     res.send(err);
+    //   }
+    // }
+    ).then(()=>{res.send("saved");
+  }).catch((err)=>{res.send(err)})
+  
 });
 
 app.listen(3000,()=>{
