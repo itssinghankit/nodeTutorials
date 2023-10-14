@@ -1,82 +1,125 @@
-const express= require("express");
-const mongoose= require("mongoose");
+const express = require("express");
+const mongoose = require("mongoose");
 const ejs = require("ejs");
-const bodyParser=require("body-parser");
+const bodyParser = require("body-parser");
 
-const app= express();
- 
+const app = express();
+
 mongoose.connect("mongodb://0.0.0.0/wikiDB", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 
-app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
 app.use(express.static("public"));
 
-app.set("view engine","ejs");
+app.set("view engine", "ejs");
 
-const articleSchema={
-  title:String,
-  content:String
+const articleSchema = {
+  title: String,
+  content: String
 };
 
-const Articles=mongoose.model("articles",articleSchema);
+const Articles = mongoose.model("articles", articleSchema);
 
+//*******new method of route **********
+app.route("/articles")
+  .get((req, res) => {
 
-        //for get request
-app.get("/articles",(req,res)=>{
-  Articles.find().then((articles)=>{
+    Articles.find()
+      .then((articles) => {
+        res.send(articles);
+      })
+      .catch((err) => {
+        res.send(err);
+      });
 
-                  // show all articles
-    // console.log(articles);
+  })
+  .post((req, res) => {
 
-                  // to access each articles
-    // articles.forEach((element)=>{
-    //   console.log(element);
-    //   // mongoose.connection.close();
-    // })
+    const newArticle = new Articles({
+      title: req.body.title,
+      content: req.body.content
+    });
 
-    res.send(articles);
-    // mongoose.connection.close();
+    newArticle.save()
+      .then(() => {
+        res.send("successfully add new article");
+      })
+      .catch((err) => {
+        res.send(err);
+      });
 
+  })
+  .delete((req, res) => {
 
-  }).catch((err)=>{
-    console.log(err);
+    Articles.deleteMany()
+      .then(() => {
+        res.send("articles deleted successfully");
+      })
+      .catch((err) => {
+        res.send(err);
+      });
+
   });
-});
 
-      //for post request
-app.post("/articles",(req,res)=>{
 
-  // console.log(req.body.title);
-  // console.log(req.body.content);
-  // res.send("received");
+//         //for get request
+// app.get("/articles",(req,res)=>{
+//   Articles.find().then((articles)=>{
 
-      //to save data in our mongo DB database
-  const newArticle= new Articles({
-    title: req.body.title,
-    content: req.body.content
-    
-  });
-  newArticle.save(
-    // function(err){
-    //   if(!err){
-    //     res.send("SAVED");
-    //   }else{
-    //     res.send(err);
-    //   }
-    // }
-    ).then(()=>{res.send("saved");
-  }).catch((err)=>{res.send(err)})
-  
-});
+//                   // show all articles
+//     // console.log(articles);
 
-app.delete("/articles",(req,res)=>{
-  Articles.deleteMany(
-  ).then(()=>{res.send("succesfully deleted")}
-  ).catch((err)=>{res.send(err)});
-});
+//                   // to access each articles
+//     // articles.forEach((element)=>{
+//     //   console.log(element);
+//     //   // mongoose.connection.close();
+//     // })
 
-app.listen(3000,()=>{
-console.log("server started on port 3000");
+//     res.send(articles);
+//     // mongoose.connection.close();
+
+
+//   }).catch((err)=>{
+//     console.log(err);
+//   });
+// });
+
+//       //for post request
+// app.post("/articles",(req,res)=>{
+
+//   // console.log(req.body.title);
+//   // console.log(req.body.content);
+//   // res.send("received");
+
+//       //to save data in our mongo DB database
+//   const newArticle= new Articles({
+//     title: req.body.title,
+//     content: req.body.content
+
+//   });
+//   newArticle.save(
+//     // function(err){
+//     //   if(!err){
+//     //     res.send("SAVED");
+//     //   }else{
+//     //     res.send(err);
+//     //   }
+//     // }
+//     ).then(()=>{res.send("saved");
+//   }).catch((err)=>{res.send(err)})
+
+// });
+
+// app.delete("/articles",(req,res)=>{
+//   Articles.deleteMany(
+//   ).then(()=>{res.send("succesfully deleted")}
+//   ).catch((err)=>{res.send(err)});
+// });
+
+app.listen(3000, () => {
+  console.log("server started on port 3000");
 });
