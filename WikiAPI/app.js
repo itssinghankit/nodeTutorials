@@ -37,7 +37,7 @@ app.get("/articles",(req,res)=>{
     // })
 
     res.send(articles);
-    mongoose.connection.close();
+    // mongoose.connection.close();
 
 
   }).catch((err)=>{
@@ -69,6 +69,12 @@ app.post("/articles",(req,res)=>{
     ).then(()=>{res.send("saved");
   }).catch((err)=>{res.send(err)})
   
+});
+
+app.delete("/articles",(req,res)=>{
+  Articles.deleteMany(
+  ).then(()=>{res.send("succesfully deleted")}
+  ).catch((err)=>{res.send(err)});
 });
 
 app.listen(3000,()=>{
