@@ -70,7 +70,7 @@ app.route("/articles")
 
 app.route("/articles/:articleTitle")
   .get((req, res) => {
-    Articles.findOne({ title: req.params.articleTitl })
+    Articles.findOne({ title: req.params.articleTitle })
       .then((foundArticle) => {
         if (foundArticle) {
           res.send(foundArticle);
@@ -80,7 +80,27 @@ app.route("/articles/:articleTitle")
       })
       .catch((err) => {
         res.send(err);
+      });
+  })
+  .put((req, res) => {
+
+    Articles.updateOne(
+
+      { title: req.params.articleTitle },
+      { $set: { title: req.body.title, content: req.body.content } }
+
+    )
+      .then((result) => {
+        if (result) {
+          res.send("Article updated successfully");
+        } else {
+          res.send("No articles were updated. Perhaps the condition did not match any documents.");
+        }
       })
+      .catch((err) => {
+        res.send(err);
+      });
+
   });
 
 //         //for get request
