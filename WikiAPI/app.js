@@ -5,7 +5,8 @@ const bodyParser = require("body-parser");
 
 const app = express();
 
-mongoose.connect("mongodb://0.0.0.0/wikiDB", {
+// mongoose.connect("mongodb://0.0.0.0/wikiDB", {
+mongoose.connect("mongodb+srv://itssinghankit:9555970464@cluster0.mpq06l0.mongodb.net/wikiDB", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
