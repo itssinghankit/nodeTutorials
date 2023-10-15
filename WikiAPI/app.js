@@ -113,6 +113,21 @@ app.route("/articles/:articleTitle")
         res.send(err);
       });
 
+  })
+  .delete((req, res) => {
+
+    Articles.deleteOne(
+
+      { title: req.params.articleTitle }
+
+    )
+      .then(() => {
+        res.send("article delted successfully");
+      })
+      .catch(() => {
+        res.send(err);
+      });
+
   });
 
 //         //for get request
