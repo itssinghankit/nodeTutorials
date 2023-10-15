@@ -24,7 +24,8 @@ const articleSchema = {
 
 const Articles = mongoose.model("articles", articleSchema);
 
-//*******new method of route **********
+////////////////////////////////////////////////// new method of route//////////////////////////////////////////
+
 app.route("/articles")
   .get((req, res) => {
 
@@ -65,6 +66,22 @@ app.route("/articles")
 
   });
 
+////////////////////////////////////////////////// for perticular article /////////////////////////////////////////
+
+app.route("/articles/:articleTitle")
+  .get((req, res) => {
+    Articles.findOne({ title: req.params.articleTitl })
+      .then((foundArticle) => {
+        if (foundArticle) {
+          res.send(foundArticle);
+        } else {
+          res.send("Article not found");
+        }
+      })
+      .catch((err) => {
+        res.send(err);
+      })
+  });
 
 //         //for get request
 // app.get("/articles",(req,res)=>{
