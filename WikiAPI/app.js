@@ -90,12 +90,24 @@ app.route("/articles/:articleTitle")
       { $set: { title: req.body.title, content: req.body.content } }
 
     )
-      .then((result) => {
-        if (result) {
-          res.send("Article updated successfully");
-        } else {
-          res.send("No articles were updated. Perhaps the condition did not match any documents.");
-        }
+      .then(() => {
+        res.send("Article updated successfully");
+      })
+      .catch((err) => {
+        res.send(err);
+      });
+
+  })
+  .patch((req, res) => {
+
+    Articles.updateOne(
+
+      { title: req.params.articleTitle },
+      { $set: req.body }
+
+    )
+      .then(() => {
+        res.send("specific detail is updated");
       })
       .catch((err) => {
         res.send(err);
