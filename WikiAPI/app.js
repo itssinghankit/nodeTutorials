@@ -9,7 +9,8 @@ const app = express();
 mongoose.connect("mongodb+srv://itssinghankit:9555970464@cluster0.mpq06l0.mongodb.net/wikiDB", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-});
+}).then(() => console.log("Connected to db"));
+
 
 app.use(bodyParser.urlencoded({
   extended: true
@@ -25,7 +26,11 @@ const articleSchema = {
 
 const Articles = mongoose.model("articles", articleSchema);
 
-////////////////////////////////////////////////// new method of route//////////////////////////////////////////
+app.get("/", (req, res) => {
+  res.send("welcome to our website");
+});
+
+////////////////////////////////////////////////// new method of route ///////////////////////////////////
 
 app.route("/articles")
   .get((req, res) => {
@@ -67,7 +72,7 @@ app.route("/articles")
 
   });
 
-////////////////////////////////////////////////// for perticular article /////////////////////////////////////////
+////////////////////////////////////////////////// for perticular article //////////////////////////////
 
 app.route("/articles/:articleTitle")
   .get((req, res) => {
@@ -115,20 +120,17 @@ app.route("/articles/:articleTitle")
       });
 
   })
-  .delete((req, res) => {
+  .delete(async (req, res) => {
 
-    Articles.deleteOne(
-
-      { title: req.params.articleTitle }
-
-    )
-      .then(() => {
-        res.send("article delted successfully");
-      })
-      .catch(() => {
-        res.send(err);
-      });
-
+    try {
+      const articleTitle = req.params.articleTitle;
+      const article = await Articles.findOne({ title: articleTitle });
+      if (!article) return res.status(400).json({ message: "Already Deleted" });
+      await Articles.deleteOne({ title: articleTitle });
+      return res.status(200).json({ message: "Deleted Successfully" })
+    } catch (error) {
+      console.log(error.message);
+    }
   });
 
 //         //for get request
